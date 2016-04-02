@@ -33,3 +33,8 @@ class Message(models.Model):
 	def id():
 		return self.id
 
+class User(models.Model):
+	currentLocation = [models.IntegerField, models.IntegerField]
+	isActiveTransmitter = models.BooleanField
+	messages = models.CharField(max_length=1000) #use literal_eval to convert to list
+	lastRequest = models.DateTimeField('last request')
