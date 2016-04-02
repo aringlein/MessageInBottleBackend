@@ -26,6 +26,10 @@ class Choice(models.Model):
 class Message(models.Model):
 	text = models.CharField(max_length=500)
 	pub_date = models.DateTimeField('date published')
+	firstSender = models.IntegerField(default=0)
+	graphData = models.CharField(max_length=10000, default= 'x' * 10000)
+	rejections = models.IntegerField(default=0)
+	forwards = models.IntegerField(default=0)
 
 	def __str__(self):
 		return self.text
