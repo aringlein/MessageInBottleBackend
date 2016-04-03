@@ -40,12 +40,13 @@ def update(request):
 			if mes.lastUpdate < user.lastRequest:
 				messageList.append(mes.id)
 
+		mUser = ast.literal_eval(user.messages)
 		#add messages which should be passed by people who are local
 		for other in User.objects():
 			if ((user.latitude - other.latitude) ** 2 + (user.longitude - other.longitude) ** 2) ** .5 < .05:
 				#close enough
 				mOther = ast.literal_eval(other.messages)
-				mUser = ast.literal_eval(user.messages)
+				
 
 				for item in mOther:
 					if mUser.contains(item) == False and messageList.contains(item) == False:
@@ -58,12 +59,17 @@ def update(request):
 						m.lastUpdate = timezone.now()
 						m.save()
 
+				#update the list of messages the user forwards
+				for m in messageList:
+					if mUser.contains(m) == False:
+						mUser.append(m)
+
 						#TODO: change byte array
 
 		#add graph items to a list to send to a dict
 
 		user.lastRequest = timezone.now()
-		user.save()
+		
 		#print(User.objects.get(id=userId).currentLocation[0])
 
 		for update in updates:
@@ -75,10 +81,14 @@ def update(request):
 			mes.lastUpdate = timezone.now()
 			if val == 0:
 				mes.rejections += 1
+				if mUser.contains(m_id):
+					mUser.remove(m_id)
 			else:
 				mes.forwards += 1
 				#Set this user to actively forward TODO
 			mes.save()
+		user.messages = str(mUser)
+		user.save()
 
 		return JsonResponse({"id": userId, "lat": lat, "lon":lon})
 
