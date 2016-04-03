@@ -35,12 +35,14 @@ def update(request):
 		user.latitude = lat
 		user.longitude = lon
 
+		mUser = ast.literal_eval(user.messages)
+
 		#add all messages which have been updated
-		for mes in Message.objects():
+		for m in mUser:
+			mes = Message(id=m)
 			if mes.lastUpdate < user.lastRequest:
 				messageList.append(mes.id)
 
-		mUser = ast.literal_eval(user.messages)
 		#add messages which should be passed by people who are local
 		for other in User.objects():
 			if ((user.latitude - other.latitude) ** 2 + (user.longitude - other.longitude) ** 2) ** .5 < .05:
@@ -105,6 +107,13 @@ def new(request):
 		m.save()
 
 		return HttpResponse('OK')
+
+@csrf_exempt
+def initial(request):
+	if request.method == 'POST':
+		u = User()
+		u.save()
+		return JsonResponse({"id": u.id})
 
 
 
