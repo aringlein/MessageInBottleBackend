@@ -1,12 +1,14 @@
 from django.db import models
 from django.utils import timezone
+import datetime
+
 
 
 # Create your models here.
 
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateTimeField(default=timezone.now())
 
     def __str__(self):
     	return self.question_text
@@ -25,7 +27,8 @@ class Choice(models.Model):
 
 class Message(models.Model):
 	text = models.CharField(max_length=500)
-	pub_date = models.DateTimeField('date published')
+	pub_date = models.DateTimeField(default=timezone.now())
+	lastUpdate = models.DateTimeField(default=timezone.now())
 	firstSender = models.IntegerField(default=0)
 	graphData = models.CharField(max_length=10000, default= 'x' * 10000)
 	rejections = models.IntegerField(default=0)
@@ -42,7 +45,17 @@ class User(models.Model):
 	longitude = models.FloatField(default=0)
 	isActiveTransmitter = models.BooleanField(default = True)
 	messages = models.CharField(max_length=1000) #use literal_eval to convert to list
-	lastRequest = models.DateTimeField('last request')
+	lastRequest = models.DateTimeField(default=timezone.now())
 
 	def getLocation(self):
 		return self.currentLocation
+
+class GraphItem(models.Model):
+	lat1 = models.FloatField(default=0)
+	lat2 = models.FloatField(default=0)
+	lon1 = models.FloatField(default=0)
+	lon2 = models.FloatField(default=0)
+	val = models.FloatField(default=0)
+	messageId = models.FloatField(default=0)
+
+
