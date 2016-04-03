@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Message
+from .models import Message, User 
 from .models import Question
 from django.http import HttpResponse
 import json
@@ -23,8 +23,22 @@ def info(request, message_id):
 @csrf_exempt
 def update(request):
 	if request.method == 'POST':
-		val = request.POST.get('id')
-		return JsonResponse({"id": val})
+
+		userId = request.POST.get('user')
+		lat = request.POST.get('latitude')
+		lon = request.POST.get('longitude')
+		updates = json.loads(request.POST.get('updates'))
+
+		user = User.objects.get(id=userId)
+		print(user.latitude)
+		user.latitude = lat
+		user.longitude = lon
+		user.save()
+		#print(User.objects.get(id=userId).currentLocation[0])
+
+		for update in updates:
+			print(update)
+		return JsonResponse({"id": userId, "lat": lat, "lon":lon})
 
 @csrf_exempt
 def index(request):

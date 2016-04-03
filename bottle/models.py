@@ -38,7 +38,11 @@ class Message(models.Model):
 		return self.id
 
 class User(models.Model):
-	currentLocation = [models.IntegerField, models.IntegerField]
-	isActiveTransmitter = models.BooleanField
+	latitude = models.FloatField(default=0)
+	longitude = models.FloatField(default=0)
+	isActiveTransmitter = models.BooleanField(default = True)
 	messages = models.CharField(max_length=1000) #use literal_eval to convert to list
 	lastRequest = models.DateTimeField('last request')
+
+	def getLocation(self):
+		return self.currentLocation
