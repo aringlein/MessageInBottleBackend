@@ -24,8 +24,7 @@ def info(request, message_id):
 def update(request):
 	if request.method == 'POST':
 		val = request.POST.get('id')
-
-		return JsonResponse({'id': val})
+		return JsonResponse({"id": val})
 
 @csrf_exempt
 def index(request):
