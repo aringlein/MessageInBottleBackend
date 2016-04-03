@@ -30,7 +30,7 @@ class Message(models.Model):
 	pub_date = models.DateTimeField(default=timezone.now())
 	lastUpdate = models.DateTimeField(default=timezone.now())
 	firstSender = models.IntegerField(default=0)
-	graphData = models.CharField(max_length=10000, default= ('[]' + ' ' * 9998))
+	graphData = models.CharField(max_length=10000, default= ("[]"))
 	rejections = models.IntegerField(default=0)
 	forwards = models.IntegerField(default=0)
 
@@ -44,7 +44,7 @@ class User(models.Model):
 	latitude = models.FloatField(default=0)
 	longitude = models.FloatField(default=0)
 	isActiveTransmitter = models.BooleanField(default = True)
-	messages = models.CharField(max_length=1000, default= ('[]' + ' ' * 9998)) #use literal_eval to convert to list
+	messages = models.CharField(max_length=1000, default= ("[]")) #use literal_eval to convert to list
 	lastRequest = models.DateTimeField(default=timezone.now())
 
 	def getLocation(self):
